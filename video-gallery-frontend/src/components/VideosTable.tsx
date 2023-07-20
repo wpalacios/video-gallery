@@ -1,6 +1,7 @@
 import { Button, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useCallback, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
 import { useVideoService } from "../services";
 import { CreateUpdateVideoDTO } from "../types/dtos/video.dto";
@@ -14,6 +15,7 @@ interface DataType {
 
 const VideosTable = (): React.ReactElement => {
   const { getAll } = useVideoService();
+  const navigate = useNavigate();
   const { isModalOpen, videos, setVideos, setCurrentVideo, setIsModalOpen } =
     useContext(AppContext);
 
@@ -39,11 +41,28 @@ const VideosTable = (): React.ReactElement => {
     [setCurrentVideo, setIsModalOpen, isModalOpen]
   );
 
+  const handleRedirect = useCallback(
+    (record: DataType) => {
+      setCurrentVideo(record as CreateUpdateVideoDTO);
+      navigate(`videos/${record.id}`);
+    },
+    [setCurrentVideo, navigate]
+  );
+
   const columns: ColumnsType<DataType> = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      render: (_, record) => (
+        <a
+          href={undefined}
+          target="_self"
+          onClick={() => handleRedirect(record)}
+        >
+          {record.name}
+        </a>
+      ),
     },
     {
       title: "URL",

@@ -4,6 +4,7 @@ import { CreateUpdateVideoDTO } from "../../types/dtos/video.dto";
 
 export default interface VideoService {
   getAll: () => Promise<AxiosResponse<Array<Video>>>;
+  findOne: (id: number) => Promise<AxiosResponse<Video>>;
   update: (
     id: number,
     payload: CreateUpdateVideoDTO

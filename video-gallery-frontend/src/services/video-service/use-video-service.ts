@@ -6,6 +6,10 @@ import { Video } from "../../types/models/video";
 import { CreateUpdateVideoDTO } from "../../types/dtos/video.dto";
 
 const useDaoService = (): VideoService => {
+  const findOne = useCallback((id: number): Promise<AxiosResponse<Video>> => {
+    return axios.get<Video>(`${videosUrl}/${id}`);
+  }, []);
+
   const getAll = useCallback((): Promise<AxiosResponse<Array<Video>>> => {
     return axios.get<Video[]>(videosUrl);
   }, []);
@@ -32,6 +36,7 @@ const useDaoService = (): VideoService => {
 
   return {
     create,
+    findOne,
     getAll,
     update,
   };
