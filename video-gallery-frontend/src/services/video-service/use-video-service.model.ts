@@ -10,4 +10,5 @@ export default interface VideoService {
     payload: CreateUpdateVideoDTO
   ) => Promise<AxiosResponse<Video>>;
   create: (payload: CreateUpdateVideoDTO) => Promise<AxiosResponse<Video>>;
+  deleteOne: (id: number) => Promise<AxiosResponse>;
 }

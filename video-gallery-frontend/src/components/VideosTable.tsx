@@ -14,7 +14,7 @@ interface DataType {
 }
 
 const VideosTable = (): React.ReactElement => {
-  const { getAll } = useVideoService();
+  const { getAll, deleteOne } = useVideoService();
   const navigate = useNavigate();
   const { isModalOpen, videos, setVideos, setCurrentVideo, setIsModalOpen } =
     useContext(AppContext);
@@ -39,6 +39,25 @@ const VideosTable = (): React.ReactElement => {
       setIsModalOpen(!isModalOpen);
     },
     [setCurrentVideo, setIsModalOpen, isModalOpen]
+  );
+
+  const handleDelete = useCallback(
+    (record: DataType) => {
+      const deleteVideo = async (id: number) => {
+        const res = await deleteOne(id);
+        if (res.status === 200) {
+          const updatedValues = [...videos];
+          const foundIndex = updatedValues.findIndex((x) => x.id === id);
+          if (foundIndex) {
+            updatedValues.splice(foundIndex, 1);
+            setVideos(updatedValues);
+          }
+        }
+      };
+
+      deleteVideo(record.id);
+    },
+    [setCurrentVideo, navigate, setVideos, deleteOne, videos]
   );
 
   const handleRedirect = useCallback(
@@ -81,6 +100,9 @@ const VideosTable = (): React.ReactElement => {
         <Space>
           <Button type="default" onClick={() => handleUpdate(record)}>
             Update
+          </Button>
+          <Button type="default" onClick={() => handleDelete(record)}>
+            Delete
           </Button>
         </Space>
       ),

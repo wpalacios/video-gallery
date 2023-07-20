@@ -24,6 +24,12 @@ const useDaoService = (): VideoService => {
     []
   );
 
+  const deleteOne = useCallback((id: number): Promise<AxiosResponse<Video>> => {
+    return axios.delete<CreateUpdateVideoDTO, AxiosResponse>(
+      `${videosUrl}/${id}`
+    );
+  }, []);
+
   const create = useCallback(
     (data: CreateUpdateVideoDTO): Promise<AxiosResponse<Video>> => {
       return axios.post<CreateUpdateVideoDTO, AxiosResponse<Video>>(
@@ -36,6 +42,7 @@ const useDaoService = (): VideoService => {
 
   return {
     create,
+    deleteOne,
     findOne,
     getAll,
     update,
